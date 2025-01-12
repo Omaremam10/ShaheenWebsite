@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Shaheen Falcon LTD</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        nav { ... } /* نفس الكود المستخدم في الصفحة الرئيسية */
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<header>
+    <div class="contact-info">
+        <span>📞 +201005071246</span>
+        <span>📍 Rwanda</span>
+    </div>
+    <button class="language-switch" onclick="switchLanguage()">EN / RW</button>
+</header>
 
 <nav>
     <a href="index.html">Home</a>
@@ -22,8 +27,18 @@
     <h1>Contact Us</h1>
     <p><strong>Location:</strong> Rwanda</p>
     <p><strong>Phone:</strong> +201005071246</p>
-    <img src="images/company.jpg" alt="Company Image">
+    <img src="images/company.jpg" alt="Company" style="width: 100%; height: auto;">
 </div>
+
+<footer>
+    &copy; 2025 Shaheen Falcon LTD. All Rights Reserved.
+</footer>
+
+<script>
+    function switchLanguage() {
+        alert('Language switching functionality is under development!');
+    }
+</script>
 
 </body>
 </html>
