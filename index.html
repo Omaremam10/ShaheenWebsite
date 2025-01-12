@@ -1,179 +1,139 @@
-/*
-This is the index.html file for the homepage of Shaheen Falcon LTD.
-Below are the components of the page:
-1. Navigation Bar: Update links and branding as needed.
-2. Hero Section: Change the main heading, subheading, and background image.
-3. Product Section: Replace product images, titles, and descriptions.
-4. Footer: Update the copyright information.
-*/
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaheen Falcon LTD - Home</title>
+    <title>Shaheen Falcon LTD</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
-
-        /* Navbar Styling */
-        nav {
-            background-color: #ffcc00;
-            color: white;
-            padding: 10px 20px;
+        header {
+            background-color: #f5c518;
+            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        nav a {
+        header .contact-info {
+            font-size: 0.9em;
             color: white;
+        }
+        header .contact-info span {
+            margin-right: 20px;
+        }
+        header .language-switch {
+            background-color: white;
+            color: #f5c518;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px 0;
+        }
+        nav a {
             text-decoration: none;
+            color: white;
             margin: 0 15px;
             font-weight: bold;
         }
         nav a:hover {
-            text-decoration: underline;
+            color: #f5c518;
         }
-
-        /* Hero Section */
-        .hero {
+        .logo {
             text-align: center;
-            background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
-            color: white;
-            padding: 50px 20px;
+            margin: 20px 0;
         }
-        .hero h1 {
-            font-size: 3em;
+        .logo img {
+            max-width: 150px;
         }
-
-        /* Product Section */
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        .carousel {
+            max-width: 90%;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+        }
+        .carousel img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease-in-out;
+        }
+        .products-section {
+            text-align: center;
             padding: 20px;
         }
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            text-align: center;
-            background: white;
-            transition: transform 0.3s;
-        }
-        .product:hover {
-            transform: scale(1.05);
-        }
-        .product img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .product h3 {
-            margin: 10px 0;
-        }
-        .product p {
-            color: #555;
-            padding: 0 10px;
-        }
-
-        /* Footer */
         footer {
-            text-align: center;
             background-color: #333;
             color: white;
+            text-align: center;
             padding: 10px 0;
-        }
-
-        /* Language Selector */
-        .language-selector {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-        .language-selector select {
-            padding: 5px;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav>
-        <div><strong>Shaheen Falcon LTD</strong></div>
-        <div>
-            <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-    </nav>
 
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <select id="language" onchange="changeLanguage()">
-            <option value="en">English</option>
-            <option value="rw">Kinyarwanda</option>
-        </select>
+<header>
+    <div class="contact-info">
+        <span>📞 +201005071246</span>
+        <span>📍 Rwanda</span>
     </div>
+    <button class="language-switch" onclick="switchLanguage()">EN / RW</button>
+</header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Welcome to Shaheen Falcon LTD</h1>
-        <p>Explore our top-notch electrical products for all your needs!</p>
-    </section>
+<nav>
+    <a href="index.html">Home</a>
+    <a href="electrical-products.html">Electrical Products</a>
+    <a href="wood-products.html">Wood Products</a>
+    <a href="contact.html">Contact Us</a>
+</nav>
 
-    <!-- Products Section -->
-    <section class="products">
-        <div class="product">
-            <img src="https://via.placeholder.com/250" alt="Product 1">
-            <h3>Electrical Product 1</h3>
-            <p>Reliable and efficient for your home or office.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/250" alt="Product 2">
-            <h3>Electrical Product 2</h3>
-            <p>High-performance with cutting-edge technology.</p>
-        </div>
-        <div class="product">
-            <img src="https://via.placeholder.com/250" alt="Product 3">
-            <h3>Electrical Product 3</h3>
-            <p>Eco-friendly and built to last.</p>
-        </div>
-    </section>
+<div class="logo">
+    <img src="images/logo.png" alt="Shaheen Falcon LTD Logo">
+    <h1>Shaheen Falcon LTD</h1>
+</div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Shaheen Falcon LTD. All rights reserved.</p>
-    </footer>
+<div class="carousel">
+    <img src="images/product1.jpg" alt="Featured Product 1">
+    <img src="images/product2.jpg" alt="Featured Product 2">
+    <img src="images/product3.jpg" alt="Featured Product 3">
+</div>
 
-    <script>
-        function changeLanguage() {
-            const lang = document.getElementById('language').value;
-            if (lang === 'rw') {
-                document.querySelector('.hero h1').innerText = "Murakaza neza kuri Shaheen Falcon LTD";
-                document.querySelector('.hero p').innerText = "Tumenyereze ibicuruzwa byacu by'amashanyarazi byiza cyane!";
-                document.querySelectorAll('.product h3')[0].innerText = "Ibicuruzwa Amashanyarazi 1";
-                document.querySelectorAll('.product p')[0].innerText = "Byizewe kandi byiza ku rugo cyangwa biro yawe.";
-                document.querySelectorAll('.product h3')[1].innerText = "Ibicuruzwa Amashanyarazi 2";
-                document.querySelectorAll('.product p')[1].innerText = "Bikora neza kandi bigezweho.";
-                document.querySelectorAll('.product h3')[2].innerText = "Ibicuruzwa Amashanyarazi 3";
-                document.querySelectorAll('.product p')[2].innerText = "Birengera ibidukikije kandi biramba.";
-            } else {
-                document.querySelector('.hero h1').innerText = "Welcome to Shaheen Falcon LTD";
-                document.querySelector('.hero p').innerText = "Explore our top-notch electrical products for all your needs!";
-                document.querySelectorAll('.product h3')[0].innerText = "Electrical Product 1";
-                document.querySelectorAll('.product p')[0].innerText = "Reliable and efficient for your home or office.";
-                document.querySelectorAll('.product h3')[1].innerText = "Electrical Product 2";
-                document.querySelectorAll('.product p')[1].innerText = "High-performance with cutting-edge technology.";
-                document.querySelectorAll('.product h3')[2].innerText = "Electrical Product 3";
-                document.querySelectorAll('.product p')[2].innerText = "Eco-friendly and built to last.";
-            }
-        }
-    </script>
+<section class="products-section">
+    <h2>Explore Our Products</h2>
+    <div>
+        <a href="electrical-products.html">Electrical Products</a> |
+        <a href="wood-products.html">Wood Products</a>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 Shaheen Falcon LTD. All Rights Reserved.
+</footer>
+
+<script>
+    // Carousel Auto-Scroll Script
+    const images = document.querySelectorAll('.carousel img');
+    let currentImageIndex = 0;
+
+    setInterval(() => {
+        images.forEach((img, index) => {
+            img.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+        });
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+    }, 3000);
+
+    // Language Switcher
+    function switchLanguage() {
+        alert('Language switching functionality is under development!');
+    }
+</script>
+
 </body>
 </html>
