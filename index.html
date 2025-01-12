@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Showcase</title>
+    <title>Shaheen Falcon LTD</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
 
         /* Navbar Styling */
         nav {
-            background-color: #333;
+            background-color: #ffcc00;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -24,6 +24,7 @@
             color: white;
             text-decoration: none;
             margin: 0 15px;
+            font-weight: bold;
         }
         nav a:hover {
             text-decoration: underline;
@@ -78,12 +79,23 @@
             color: white;
             padding: 10px 0;
         }
+
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .language-selector select {
+            padding: 5px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <!-- Navbar -->
     <nav>
-        <div><strong>My Product Site</strong></div>
+        <div><strong>Shaheen Falcon LTD</strong></div>
         <div>
             <a href="#">Home</a>
             <a href="#">Products</a>
@@ -92,34 +104,67 @@
         </div>
     </nav>
 
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="language" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="rw">Kinyarwanda</option>
+        </select>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Welcome to Our Product Showcase</h1>
-        <p>Discover the best products for your needs!</p>
+        <h1>Welcome to Shaheen Falcon LTD</h1>
+        <p>Explore our top-notch electrical products for all your needs!</p>
     </section>
 
     <!-- Products Section -->
     <section class="products">
         <div class="product">
             <img src="https://via.placeholder.com/250" alt="Product 1">
-            <h3>Product 1</h3>
-            <p>High-quality product for everyday use.</p>
+            <h3>Electrical Product 1</h3>
+            <p>Reliable and efficient for your home or office.</p>
         </div>
         <div class="product">
             <img src="https://via.placeholder.com/250" alt="Product 2">
-            <h3>Product 2</h3>
-            <p>Top-notch features at an affordable price.</p>
+            <h3>Electrical Product 2</h3>
+            <p>High-performance with cutting-edge technology.</p>
         </div>
         <div class="product">
             <img src="https://via.placeholder.com/250" alt="Product 3">
-            <h3>Product 3</h3>
-            <p>Built to last with premium materials.</p>
+            <h3>Electrical Product 3</h3>
+            <p>Eco-friendly and built to last.</p>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 My Product Site. All rights reserved.</p>
+        <p>&copy; 2025 Shaheen Falcon LTD. All rights reserved.</p>
     </footer>
+
+    <script>
+        function changeLanguage() {
+            const lang = document.getElementById('language').value;
+            if (lang === 'rw') {
+                document.querySelector('.hero h1').innerText = "Murakaza neza kuri Shaheen Falcon LTD";
+                document.querySelector('.hero p').innerText = "Tumenyereze ibicuruzwa byacu by'amashanyarazi byiza cyane!";
+                document.querySelectorAll('.product h3')[0].innerText = "Ibicuruzwa Amashanyarazi 1";
+                document.querySelectorAll('.product p')[0].innerText = "Byizewe kandi byiza ku rugo cyangwa biro yawe.";
+                document.querySelectorAll('.product h3')[1].innerText = "Ibicuruzwa Amashanyarazi 2";
+                document.querySelectorAll('.product p')[1].innerText = "Bikora neza kandi bigezweho.";
+                document.querySelectorAll('.product h3')[2].innerText = "Ibicuruzwa Amashanyarazi 3";
+                document.querySelectorAll('.product p')[2].innerText = "Birengera ibidukikije kandi biramba.";
+            } else {
+                document.querySelector('.hero h1').innerText = "Welcome to Shaheen Falcon LTD";
+                document.querySelector('.hero p').innerText = "Explore our top-notch electrical products for all your needs!";
+                document.querySelectorAll('.product h3')[0].innerText = "Electrical Product 1";
+                document.querySelectorAll('.product p')[0].innerText = "Reliable and efficient for your home or office.";
+                document.querySelectorAll('.product h3')[1].innerText = "Electrical Product 2";
+                document.querySelectorAll('.product p')[1].innerText = "High-performance with cutting-edge technology.";
+                document.querySelectorAll('.product h3')[2].innerText = "Electrical Product 3";
+                document.querySelectorAll('.product p')[2].innerText = "Eco-friendly and built to last.";
+            }
+        }
+    </script>
 </body>
 </html>
