@@ -5,99 +5,204 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shaheen Falcon LTD</title>
     <style>
+        /* General styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #f8f9fa;
         }
-        header, footer {
+
+        /* Top bar */
+        .top-bar {
             background-color: #333;
             color: white;
-            padding: 10px 20px;
-            text-align: center;
-        }
-        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        header .contact-info {
+            padding: 10px 20px;
             font-size: 0.9em;
         }
-        header .language-switch {
-            background-color: white;
+
+        .top-bar a {
             color: #f5c518;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
+            text-decoration: none;
+            margin-left: 10px;
         }
-        nav {
+
+        /* Search bar */
+        .search-bar {
+            padding: 10px 20px;
             display: flex;
             justify-content: center;
             background-color: #444;
-            padding: 10px 0;
         }
-        nav a {
+
+        .search-bar input {
+            width: 50%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* Navigation bar */
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            background-color: #f5c518;
+            padding: 15px 0;
+        }
+
+        .nav-bar a {
             text-decoration: none;
-            color: white;
-            margin: 0 15px;
+            color: black;
             font-weight: bold;
+            margin: 0 15px;
         }
-        nav a:hover {
-            color: #f5c518;
+
+        .nav-bar a:hover {
+            color: #333;
         }
-        .carousel img {
+
+        /* Featured products section */
+        .featured-products {
+            margin: 20px auto;
+            width: 80%;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            background-color: #ddd;
+            border-radius: 10px;
+        }
+
+        .featured-products img {
             width: 100%;
-            height: 400px; /* حجم ثابت للصور */
-            object-fit: cover; /* لضبط الصور */
-        }
-        .products-section img {
-            width: 200px;
-            height: 200px; /* حجم ثابت للصور */
+            height: 100%;
             object-fit: cover;
-            margin: 10px;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
-        footer {
-            font-size: 0.8em;
+
+        .featured-products img.active {
+            opacity: 1;
+        }
+
+        /* Product categories */
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px auto;
+            width: 80%;
+        }
+
+        .categories img {
+            width: 45%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .categories img:hover {
+            transform: scale(1.05);
+        }
+
+        /* All products section */
+        .all-products {
+            text-align: center;
+            margin: 40px auto;
+        }
+
+        .all-products h2 {
+            margin-bottom: 20px;
+        }
+
+        .all-products .product-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .all-products .product-grid img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .all-products .product-grid img:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="contact-info">
-        <span>📞 +201005071246</span>
-        <span>📍 Rwanda</span>
+<!-- Top bar -->
+<div class="top-bar">
+    <div>
+        📞 +201005071246 | 📍 <a href="contact.html">Location</a> | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
     </div>
-    <button class="language-switch" onclick="switchLanguage()">EN / RW</button>
-</header>
+    <div>
+        <strong>Shaheen Falcon LTD</strong>
+    </div>
+</div>
 
-<nav>
+<!-- Search bar -->
+<div class="search-bar">
+    <input type="text" placeholder="Search products...">
+</div>
+
+<!-- Navigation bar -->
+<div class="nav-bar">
     <a href="index.html">Home</a>
     <a href="electrical-products.html">Electrical Products</a>
     <a href="wood-products.html">Wood Products</a>
+    <a href="discounts.html">Discounts</a>
     <a href="contact.html">Contact Us</a>
-</nav>
-
-<div class="carousel">
-    <img src="images/product1.jpg" alt="Featured Product 1">
-    <img src="images/product2.jpg" alt="Featured Product 2">
 </div>
 
-<section class="products-section">
-    <h2>Featured Products</h2>
-    <img src="images/product1.jpg" alt="Product 1">
-    <img src="images/product2.jpg" alt="Product 2">
-</section>
+<!-- Featured products -->
+<div class="featured-products" id="featured-products">
+    <img src="images/featured1.jpg" alt="Featured Product 1" class="active">
+    <img src="images/featured2.jpg" alt="Featured Product 2">
+    <img src="images/featured3.jpg" alt="Featured Product 3">
+    <img src="images/featured4.jpg" alt="Featured Product 4">
+</div>
 
-<footer>
-    &copy; 2025 Shaheen Falcon LTD. All Rights Reserved.
-</footer>
+<!-- Product categories -->
+<div class="categories">
+    <img src="images/electrical-category.jpg" alt="Electrical Products" onclick="window.location.href='electrical-products.html'">
+    <img src="images/wooden-category.jpg" alt="Wooden Products" onclick="window.location.href='wood-products.html'">
+</div>
+
+<!-- All products -->
+<div class="all-products">
+    <h2>Explore Our Products</h2>
+    <div class="product-grid">
+        <img src="images/product1.jpg" alt="Product 1">
+        <img src="images/product2.jpg" alt="Product 2">
+        <img src="images/product3.jpg" alt="Product 3">
+        <img src="images/product4.jpg" alt="Product 4">
+    </div>
+</div>
 
 <script>
-    function switchLanguage() {
-        alert('Language switching functionality is under development!');
+    // JavaScript for featured product carousel
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.featured-products img');
+
+    function showNextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
     }
+
+    setInterval(showNextSlide, 3000); // Change slide every 3 seconds
 </script>
 
 </body>
