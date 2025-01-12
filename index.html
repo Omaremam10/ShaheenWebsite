@@ -10,19 +10,19 @@
             margin: 0;
             padding: 0;
         }
+        header, footer {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
         header {
-            background-color: #f5c518;
-            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         header .contact-info {
             font-size: 0.9em;
-            color: white;
-        }
-        header .contact-info span {
-            margin-right: 20px;
         }
         header .language-switch {
             background-color: white;
@@ -30,12 +30,11 @@
             border: none;
             padding: 5px 10px;
             cursor: pointer;
-            border-radius: 5px;
         }
         nav {
             display: flex;
             justify-content: center;
-            background-color: #333;
+            background-color: #444;
             padding: 10px 0;
         }
         nav a {
@@ -47,33 +46,19 @@
         nav a:hover {
             color: #f5c518;
         }
-        .logo {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .logo img {
-            max-width: 150px;
-        }
-        .carousel {
-            max-width: 90%;
-            margin: 20px auto;
-            overflow: hidden;
-            position: relative;
-        }
         .carousel img {
             width: 100%;
-            display: block;
-            transition: transform 0.5s ease-in-out;
+            height: 400px; /* حجم ثابت للصور */
+            object-fit: cover; /* لضبط الصور */
         }
-        .products-section {
-            text-align: center;
-            padding: 20px;
+        .products-section img {
+            width: 200px;
+            height: 200px; /* حجم ثابت للصور */
+            object-fit: cover;
+            margin: 10px;
         }
         footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
+            font-size: 0.8em;
         }
     </style>
 </head>
@@ -94,23 +79,15 @@
     <a href="contact.html">Contact Us</a>
 </nav>
 
-<div class="logo">
-    <img src="images/logo.png" alt="Shaheen Falcon LTD Logo">
-    <h1>Shaheen Falcon LTD</h1>
-</div>
-
 <div class="carousel">
     <img src="images/product1.jpg" alt="Featured Product 1">
     <img src="images/product2.jpg" alt="Featured Product 2">
-    <img src="images/product3.jpg" alt="Featured Product 3">
 </div>
 
 <section class="products-section">
-    <h2>Explore Our Products</h2>
-    <div>
-        <a href="electrical-products.html">Electrical Products</a> |
-        <a href="wood-products.html">Wood Products</a>
-    </div>
+    <h2>Featured Products</h2>
+    <img src="images/product1.jpg" alt="Product 1">
+    <img src="images/product2.jpg" alt="Product 2">
 </section>
 
 <footer>
@@ -118,18 +95,6 @@
 </footer>
 
 <script>
-    // Carousel Auto-Scroll Script
-    const images = document.querySelectorAll('.carousel img');
-    let currentImageIndex = 0;
-
-    setInterval(() => {
-        images.forEach((img, index) => {
-            img.style.transform = `translateX(-${currentImageIndex * 100}%)`;
-        });
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-    }, 3000);
-
-    // Language Switcher
     function switchLanguage() {
         alert('Language switching functionality is under development!');
     }
