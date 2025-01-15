@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 20px;
+        }
+        .product-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .product-form input,
+        .product-form textarea,
+        .product-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .product-form button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product-form button:hover {
+            background-color: #45a049;
+        }
+        .product-list {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .product-list .product {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Admin Dashboard</h2>
+    <div class="product-form">
+        <h3>Add New Product</h3>
+        <input type="text" id="product-name" placeholder="Product Name">
+        <textarea id="product-description" placeholder="Product Description"></textarea>
+        <select id="product-category">
+            <option value="electrical">Electrical</option>
+            <option value="wooden">Wooden</option>
+        </select>
+        <input type="file" id="product-image" accept="image/*">
+        <button onclick="addProduct()">Add Product</button>
+    </div>
+
+    <div class="product-list">
+        <h3>Product List</h3>
+        <div id="product-items"></div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
+<script src="firebase.js"></script>
+<script>
+    const productCollection = db.collection('products');
+
+    // Add product function
+    function addProduct() {
+        const name = document.getElementById('product-name').value;
+        const description = document.getElementById('product-description').value;
+        const category = document.getElementById('product-category').value;
+        const image = document.getElementById('product-image').files[0];
+
+        if (name && description && category && image) {
+            const storageRef = firebase.storage().ref('product-images/' + image.name);
+            storageRef.put(image).then((snapshot) => {
+                snapshot.ref.getDownloadURL().then((url) => {
+                    productCollection.add({
+                        name: name,
+                        description: description,
+                        category: category,
+                        image: url,
+                    }).then(() => {
+                        alert('Product added successfully');
+                        loadProducts();
+                    }).catch((error) => {
+                        alert('Error: ' + error.message);
+                    });
+                });
+            });
+        } else {
+            alert('Please fill in all fields');
+        }
+    }
+
+    // Load products function
+    function loadProducts() {
+        productCollection.get().then((snapshot) => {
+            const productItems = document.getElementById('product-items');
+            productItems.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const product = doc.data();
+                const productItem = document.createElement('div');
+                productItem.classList.add('product');
+                productItem.innerHTML = `
+                    <div>
+                        <h4>${product.name}</h4>
+                        <p>${product.description}</p>
+                        <p>Category: ${product.category}</p>
+                        <img src="${product.image}" alt="${product.name}" width="100">
+                    </div>
+                    <button onclick="deleteProduct('${doc.id}')">Delete</button>
+                `;
+                productItems.appendChild(productItem);
+            });
+        });
+    }
+
+    // Delete product function
+    function deleteProduct(productId) {
+        productCollection.doc(productId).delete().then(() => {
+            alert('Product deleted successfully');
+            loadProducts();
+        }).catch((error) => {
+            alert('Error: ' + error.message);
+        });
+    }
+
+    // Load products on page load
+    window.onload = loadProducts;
+</script>
+
+</body>
+</html>
