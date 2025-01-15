@@ -3,38 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electrical Products - Shaheen Falcon LTD</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Electrical Products</title>
+    <style>
+        /* Reuse styles from the main page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .top-bar, .search-bar, .nav-bar {
+            /* Same styles as index.html */
+        }
+
+        .product-page {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .product-page h2 {
+            margin-bottom: 20px;
+        }
+
+        .product-page .product-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product-page .product-grid img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Top bar -->
-<div class="top-bar">
-    <div>
-        📞 +201005071246 | 📍 Location | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
-    </div>
-    <div>
-        <strong>Shaheen Falcon LTD</strong>
-    </div>
-</div>
+<!-- Include top bar, navigation bar, and search bar -->
+<!-- Same as in index.html -->
 
-<!-- Navigation bar -->
-<div class="nav-bar">
-    <a href="index.html">Home</a>
-    <a href="electrical-products.html">Electrical Products</a>
-    <a href="wood-products.html">Wood Products</a>
-    <a href="discounts.html">Discounts</a>
-    <a href="contact.html">Contact Us</a>
-</div>
-
-<!-- Electrical products section -->
-<div class="all-products">
+<!-- Electrical Products -->
+<div class="product-page">
     <h2>Our Electrical Products</h2>
     <div class="product-grid">
-        <img src="images/electrical1.jpg" alt="Electrical Product 1">
-        <img src="images/electrical2.jpg" alt="Electrical Product 2">
-        <img src="images/electrical3.jpg" alt="Electrical Product 3">
-        <img src="images/electrical4.jpg" alt="Electrical Product 4">
+        <img src="images/electrical-product1.jpg" alt="Electrical Product 1">
+        <img src="images/electrical-product2.jpg" alt="Electrical Product 2">
+        <img src="images/electrical-product3.jpg" alt="Electrical Product 3">
     </div>
 </div>
 
