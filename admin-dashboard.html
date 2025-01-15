@@ -3,148 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - Manage Products</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
         }
+
         .container {
-            margin: 20px;
+            width: 80%;
+            margin: 20px auto;
         }
-        .product-form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+
+        h1 {
+            text-align: center;
         }
-        .product-form input,
-        .product-form textarea,
-        .product-form select {
-            width: 100%;
+
+        form {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input, select, textarea {
             padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            margin: 5px 0;
+            font-size: 1em;
+            width: 100%;
             border: 1px solid #ccc;
+            border-radius: 5px;
         }
-        .product-form button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+
+        .product-list {
+            margin-top: 40px;
+        }
+
+        .product-item {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .product-item h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .product-item p {
+            margin: 5px 0;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #f5c518;
+            padding: 5px 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
-        .product-form button:hover {
-            background-color: #45a049;
+
+        .btn:hover {
+            background-color: #e0b913;
         }
-        .product-list {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        .btn-delete {
+            background-color: #e74c3c;
         }
-        .product-list .product {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        .btn-delete:hover {
+            background-color: #c0392b;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Admin Dashboard</h2>
-    <div class="product-form">
-        <h3>Add New Product</h3>
-        <input type="text" id="product-name" placeholder="Product Name">
-        <textarea id="product-description" placeholder="Product Description"></textarea>
-        <select id="product-category">
-            <option value="electrical">Electrical</option>
-            <option value="wooden">Wooden</option>
-        </select>
-        <input type="file" id="product-image" accept="image/*">
-        <button onclick="addProduct()">Add Product</button>
+    <div class="container">
+        <h1>Admin Dashboard - Manage Products</h1>
+
+        <!-- Product Add/Edit Form -->
+        <form id="product-form">
+            <input type="text" id="product-name" placeholder="Product Name" required>
+            <textarea id="product-description" placeholder="Product Description" required></textarea>
+            <select id="product-category" required>
+                <option value="">Select Category</option>
+                <option value="electrical">Electrical</option>
+                <option value="wood">Wood</option>
+            </select>
+            <input type="text" id="product-image" placeholder="Image URL (e.g., Imgur link)" required>
+            <button type="submit" class="btn">Add Product</button>
+        </form>
+
+        <!-- Product List -->
+        <div class="product-list" id="product-list">
+            <!-- Dynamic product items will be displayed here -->
+        </div>
     </div>
 
-    <div class="product-list">
-        <h3>Product List</h3>
-        <div id="product-items"></div>
-    </div>
-</div>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
-<script src="firebase.js"></script>
-<script>
-    const productCollection = db.collection('products');
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id"
+        };
 
-    // Add product function
-    function addProduct() {
-        const name = document.getElementById('product-name').value;
-        const description = document.getElementById('product-description').value;
-        const category = document.getElementById('product-category').value;
-        const image = document.getElementById('product-image').files[0];
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-        if (name && description && category && image) {
-            const storageRef = firebase.storage().ref('product-images/' + image.name);
-            storageRef.put(image).then((snapshot) => {
-                snapshot.ref.getDownloadURL().then((url) => {
-                    productCollection.add({
-                        name: name,
-                        description: description,
-                        category: category,
-                        image: url,
-                    }).then(() => {
-                        alert('Product added successfully');
-                        loadProducts();
-                    }).catch((error) => {
-                        alert('Error: ' + error.message);
-                    });
-                });
-            });
-        } else {
-            alert('Please fill in all fields');
-        }
-    }
+        // Product Collection Reference
+        const productCollection = db.collection('products');
 
-    // Load products function
-    function loadProducts() {
-        productCollection.get().then((snapshot) => {
-            const productItems = document.getElementById('product-items');
-            productItems.innerHTML = '';
-            snapshot.forEach((doc) => {
-                const product = doc.data();
-                const productItem = document.createElement('div');
-                productItem.classList.add('product');
-                productItem.innerHTML = `
-                    <div>
-                        <h4>${product.name}</h4>
+        // Load Products from Firestore
+        function loadProducts() {
+            productCollection.get().then((querySnapshot) => {
+                const productList = document.getElementById('product-list');
+                productList.innerHTML = ''; // Clear the current list
+
+                querySnapshot.forEach((doc) => {
+                    const product = doc.data();
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product-item');
+                    productElement.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
                         <p>${product.description}</p>
                         <p>Category: ${product.category}</p>
-                        <img src="${product.image}" alt="${product.name}" width="100">
-                    </div>
-                    <button onclick="deleteProduct('${doc.id}')">Delete</button>
-                `;
-                productItems.appendChild(productItem);
+                        <div class="actions">
+                            <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
+                            <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
+                        </div>
+                    `;
+                    productList.appendChild(productElement);
+                });
             });
-        });
-    }
+        }
 
-    // Delete product function
-    function deleteProduct(productId) {
-        productCollection.doc(productId).delete().then(() => {
-            alert('Product deleted successfully');
-            loadProducts();
-        }).catch((error) => {
-            alert('Error: ' + error.message);
-        });
-    }
+        // Add Product to Firestore
+        document.getElementById('product-form').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-    // Load products on page load
-    window.onload = loadProducts;
-</script>
+            const name = document.getElementById('product-name').value;
+            const description = document.getElementById('product-description').value;
+            const category = document.getElementById('product-category').value;
+            const imageUrl = document.getElementById('product-image').value;
+
+            if (name && description && category && imageUrl) {
+                productCollection.add({
+                    name: name,
+                    description: description,
+                    category: category,
+                    image: imageUrl,
+                }).then(() => {
+                    alert('Product added successfully');
+                    loadProducts();
+                }).catch((error) => {
+                    alert('Error: ' + error.message);
+                });
+            } else {
+                alert('Please fill in all fields');
+            }
+        });
+
+        // Edit Product (Placeholder function)
+        function editProduct(productId) {
+            // Implement edit functionality
+            alert('Edit product: ' + productId);
+        }
+
+        // Delete Product
+        function deleteProduct(productId) {
+            productCollection.doc(productId).delete().then(() => {
+                alert('Product deleted successfully');
+                loadProducts();
+            }).catch((error) => {
+                alert('Error: ' + error.message);
+            });
+        }
+
+        // Load products on page load
+        loadProducts();
+    </script>
 
 </body>
 </html>
