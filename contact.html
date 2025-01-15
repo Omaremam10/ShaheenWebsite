@@ -3,44 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - Shaheen Falcon LTD</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Contact Us</title>
+    <style>
+        /* Reuse styles from the main page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .top-bar, .search-bar, .nav-bar {
+            /* Same styles as index.html */
+        }
+
+        .contact-us {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .contact-us h2 {
+            margin-bottom: 20px;
+        }
+
+        .contact-us form input, .contact-us form textarea {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .contact-us form button {
+            padding: 10px 20px;
+            background-color: #f5c518;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .contact-us form button:hover {
+            background-color: #f0b500;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Top bar -->
-<div class="top-bar">
-    <div>
-        📞 +201005071246 | 📍 Location | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
-    </div>
-    <div>
-        <strong>Shaheen Falcon LTD</strong>
-    </div>
-</div>
+<!-- Include top bar, navigation bar, and search bar -->
+<!-- Same as in index.html -->
 
-<!-- Navigation bar -->
-<div class="nav-bar">
-    <a href="index.html">Home</a>
-    <a href="electrical-products.html">Electrical Products</a>
-    <a href="wood-products.html">Wood Products</a>
-    <a href="discounts.html">Discounts</a>
-    <a href="contact.html">Contact Us</a>
-</div>
-
-<!-- Contact form -->
-<div class="contact-form" style="padding: 20px;">
+<!-- Contact Us form -->
+<div class="contact-us">
     <h2>Contact Us</h2>
-    <form action="#">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="message">Message</label>
-        <textarea id="message" name="message" required></textarea>
-
-        <button type="submit">Send Message</button>
+    <form action="submit_contact.php" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required><br>
+        <input type="email" name="email" placeholder="Your Email" required><br>
+        <textarea name="message" rows="5" placeholder="Your Message" required></textarea><br>
+        <button type="submit">Submit</button>
     </form>
 </div>
 
