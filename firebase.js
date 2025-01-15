@@ -1,6 +1,5 @@
 // firebase.js
 
-// تهيئة Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
   authDomain: "shaheenfalcon-b2ea2.firebaseapp.com",
