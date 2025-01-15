@@ -3,59 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .login-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input {
-            margin-bottom: 10px;
-            padding: 10px;
-            width: 100%;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            padding: 10px;
-            width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>Login - Shaheen Falcon LTD</title>
 </head>
 <body>
 
-<div class="login-container">
-    <h2>Admin Login</h2>
-    <input type="email" id="email" placeholder="Enter your email" required>
-    <input type="password" id="password" placeholder="Enter your password" required>
-    <button onclick="login()">Login</button>
-</div>
+<h2>Login</h2>
+<form id="login-form">
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
+    <button type="submit">Login</button>
+</form>
 
-<!-- Import Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-auth.js"></script>
+<script type="module">
+  // Import Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-<!-- Import your Firebase configuration (firebase.js) -->
-<script src="firebase.js"></script>
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
+    authDomain: "shaheenfalcon-b2ea2.firebaseapp.com",
+    projectId: "shaheenfalcon-b2ea2",
+    storageBucket: "shaheenfalcon-b2ea2.firebasestorage.app",
+    messagingSenderId: "823963121655",
+    appId: "1:823963121655:web:cc6d1745a7ac0b517320f2",
+    measurementId: "G-KGEGEPVWHB"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Login function
+  const loginForm = document.getElementById('login-form');
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log("Logged in as: ", user.email);
+      // Redirect or show the user dashboard
+      window.location.href = "index.html"; // Or another page after successful login
+    } catch (error) {
+      console.error("Login failed: ", error.message);
+    }
+  });
+</script>
 
 </body>
 </html>
