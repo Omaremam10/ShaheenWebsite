@@ -8,37 +8,41 @@
 </head>
 <body>
 
-<header>
-    <div class="contact-info">
-        <span>📞 +201005071246</span>
-        <span>📍 Rwanda</span>
+<!-- Top bar -->
+<div class="top-bar">
+    <div>
+        📞 +201005071246 | 📍 Location | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
     </div>
-    <button class="language-switch" onclick="switchLanguage()">EN / RW</button>
-</header>
+    <div>
+        <strong>Shaheen Falcon LTD</strong>
+    </div>
+</div>
 
-<nav>
+<!-- Navigation bar -->
+<div class="nav-bar">
     <a href="index.html">Home</a>
     <a href="electrical-products.html">Electrical Products</a>
     <a href="wood-products.html">Wood Products</a>
+    <a href="discounts.html">Discounts</a>
     <a href="contact.html">Contact Us</a>
-</nav>
-
-<div class="contact-section">
-    <h1>Contact Us</h1>
-    <p><strong>Location:</strong> Rwanda</p>
-    <p><strong>Phone:</strong> +201005071246</p>
-    <img src="images/company.jpg" alt="Company" style="width: 100%; height: auto;">
 </div>
 
-<footer>
-    &copy; 2025 Shaheen Falcon LTD. All Rights Reserved.
-</footer>
+<!-- Contact form -->
+<div class="contact-form" style="padding: 20px;">
+    <h2>Contact Us</h2>
+    <form action="#">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
 
-<script>
-    function switchLanguage() {
-        alert('Language switching functionality is under development!');
-    }
-</script>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+
+        <button type="submit">Send Message</button>
+    </form>
+</div>
 
 </body>
 </html>
