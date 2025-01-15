@@ -1,3 +1,4 @@
+admin-dashboard.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,7 +93,6 @@
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Admin Dashboard - Manage Products</h1>
 
@@ -114,98 +114,76 @@
             <!-- Dynamic product items will be displayed here -->
         </div>
     </div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
     authDomain: "shaheenfalcon-b2ea2.firebaseapp.com",
     projectId: "shaheenfalcon-b2ea2",
-    storageBucket: "shaheenfalcon-b2ea2.firebasestorage.app",
+    storageBucket: "shaheenfalcon-b2ea2.appspot.com",
     messagingSenderId: "823963121655",
     appId: "1:823963121655:web:cc6d1745a7ac0b517320f2",
     measurementId: "G-KGEGEPVWHB"
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const productCollection = collection(db, 'products');
 
-        const db = firebase.firestore();
+  async function loadProducts() {
+      const querySnapshot = await getDocs(productCollection);
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      querySnapshot.forEach((doc) => {
+          const product = doc.data();
+          const productElement = document.createElement('div');
+          productElement.classList.add('product-item');
+          productElement.innerHTML = `
+              <img src="${product.image}" alt="${product.name}">
+              <h3>${product.name}</h3>
+              <p>${product.description}</p>
+              <p>Category: ${product.category}</p>
+              <div class="actions">
+                  <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
+                  <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
+              </div>
+          `;
+          productList.appendChild(productElement);
+      });
+  }
 
-        // Product Collection Reference
-        const productCollection = db.collection('products');
+  document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('product-name').value;
+      const description = document.getElementById('product-description').value;
+      const category = document.getElementById('product-category').value;
+      const imageUrl = document.getElementById('product-image').value;
 
-        // Load Products from Firestore
-        function loadProducts() {
-            productCollection.get().then((querySnapshot) => {
-                const productList = document.getElementById('product-list');
-                productList.innerHTML = ''; // Clear the current list
+      if (name && description && category && imageUrl) {
+          await addDoc(productCollection, {
+              name: name,
+              description: description,
+              category: category,
+              image: imageUrl
+          });
+          alert('Product added successfully');
+          loadProducts();
+      } else {
+          alert('Please fill in all fields');
+      }
+  });
 
-                querySnapshot.forEach((doc) => {
-                    const product = doc.data();
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('product-item');
-                    productElement.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
-                        <p>Category: ${product.category}</p>
-                        <div class="actions">
-                            <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
-                            <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
-                        </div>
-                    `;
-                    productList.appendChild(productElement);
-                });
-            });
-        }
+  async function deleteProduct(productId) {
+      await deleteDoc(doc(productCollection, productId));
+      alert('Product deleted successfully');
+      loadProducts();
+  }
 
-        // Add Product to Firestore
-        document.getElementById('product-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('product-name').value;
-            const description = document.getElementById('product-description').value;
-            const category = document.getElementById('product-category').value;
-            const imageUrl = document.getElementById('product-image').value;
-
-            if (name && description && category && imageUrl) {
-                productCollection.add({
-                    name: name,
-                    description: description,
-                    category: category,
-                    image: imageUrl,
-                }).then(() => {
-                    alert('Product added successfully');
-                    loadProducts();
-                }).catch((error) => {
-                    alert('Error: ' + error.message);
-                });
-            } else {
-                alert('Please fill in all fields');
-            }
-        });
-
-        // Edit Product (Placeholder function)
-        function editProduct(productId) {
-            // Implement edit functionality
-            alert('Edit product: ' + productId);
-        }
-
-        // Delete Product
-        function deleteProduct(productId) {
-            productCollection.doc(productId).delete().then(() => {
-                alert('Product deleted successfully');
-                loadProducts();
-            }).catch((error) => {
-                alert('Error: ' + error.message);
-            });
-        }
-
-        // Load products on page load
-        loadProducts();
-    </script>
+  loadProducts();
+</script>
 
 </body>
 </html>
