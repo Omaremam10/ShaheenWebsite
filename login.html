@@ -53,19 +53,21 @@
 <script src="firebase.js"></script> <!-- استدعاء firebase.js هنا -->
 
 <script>
-    // Admin login function
-    function login() {
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+   // Admin login function with popup
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-        auth.signInWithEmailAndPassword(email, password)
-            .then(() => {
-                window.location.href = 'admin-dashboard.html'; // Redirect to admin dashboard
-            })
-            .catch((error) => {
-                alert("Error: " + error.message);
-            });
-    }
+    // استخدام popup بدلاً من التوجيه
+    auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+            window.location.href = 'admin-dashboard.html'; // Redirect to admin dashboard
+        })
+        .catch((error) => {
+            alert("Error: " + error.message);
+        });
+}
+
 </script>
 
 </body>
