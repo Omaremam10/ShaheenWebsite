@@ -207,7 +207,7 @@
             const querySnapshot = await getDocs(q);
             products = [];
             querySnapshot.forEach(doc => {
-                products.push(doc.data());
+                products.push({ id: doc.id, ...doc.data() }); // Ensure `id` is included
             });
             displayProducts();
             displayPagination();
@@ -226,9 +226,9 @@
                 productItem.classList.add("product-item");
                 productItem.innerHTML = `
                     <a href="product.html?id=${product.id}">
-                        <img src="${product.image}" alt="${product.name}">
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
+                        <img src="${product.image || 'placeholder.jpg'}" alt="${product.name}">
+                        <h3>${product.name || 'No Name Available'}</h3>
+                        <p>${product.description || 'No Description Available'}</p>
                     </a>
                 `;
                 productList.appendChild(productItem);
