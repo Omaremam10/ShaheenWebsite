@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
+    <title>Wooden Products</title>
     <style>
         /* General styles */
         body {
@@ -34,6 +34,21 @@
             margin-right: 20px;
         }
 
+        /* Search bar */
+        .search-bar {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            background-color: #444;
+        }
+
+        .search-bar input {
+            width: 50%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
         /* Navigation bar */
         .nav-bar {
             display: flex;
@@ -63,44 +78,72 @@
             text-align: center;
         }
 
-        /* Product details styles */
-        .product-details {
-            display: flex;
-            justify-content: space-between;
-            gap: 40px;
+        /* Product list styles */
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
         }
 
-        .product-image {
-            width: 50%;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: auto;
+        .product-item {
+            background-color: #fff;
+            padding: 15px;
             border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .product-info {
-            width: 45%;
+        .product-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .product-info h2 {
-            margin-bottom: 20px;
+        .product-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
         }
 
-        .product-info p {
-            line-height: 1.6;
+        .product-item img:hover {
+            transform: scale(1.1);
         }
 
-        .product-info .price {
-            font-size: 1.5em;
-            color: #f5c518;
+        .product-item h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .product-item p {
+            margin: 5px 0;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            text-align: center;
             margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            background-color: #f5c518;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+
+        .pagination button:hover {
+            background-color: #e4b015;
         }
     </style>
 </head>
 <body>
-    <!-- Top bar -->
+    <!-- Top bar with admin link -->
     <div class="top-bar">
         <div>
             📞 +201005071246 | 📍 <a href="contact.html">Location</a> | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
@@ -108,6 +151,14 @@
         <div>
             <strong>Shaheen Falcon LTD</strong>
         </div>
+        <div class="admin-link">
+            <a href="login.html">Admin Login</a>
+        </div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+        <input type="text" placeholder="Search products...">
     </div>
 
     <!-- Navigation bar -->
@@ -120,15 +171,19 @@
     </div>
 
     <div class="container">
-        <h1>Product Details</h1>
-        <div class="product-details" id="product-details">
-            <!-- Product details will be displayed here -->
+        <h1>Electrical Products</h1>
+        <div class="product-list" id="product-list">
+            <!-- Dynamic product items will be displayed here -->
+        </div>
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+            <!-- Pagination buttons will be added here -->
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
@@ -143,37 +198,72 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-       async function loadProductDetails() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get("id");
-    
-    // Check if productId is available
-    if (!productId) {
-        document.getElementById("product-details").innerHTML = "<p>Product not found.</p>";
-        return;
-    }
+        let products = [];
+        let currentPage = 1;
+        const productsPerPage = 20;
 
-    const docRef = doc(db, "products", productId);
-    const docSnap = await getDoc(docRef);
+        async function loadWoodProducts() {
+            const q = query(collection(db, "products"), where("category", "==", "wood"));
+            const querySnapshot = await getDocs(q);
+            products = [];
+            querySnapshot.forEach(doc => {
+                products.push({ id: doc.id, ...doc.data() }); // Ensure `id` is included
+            });
+            displayProducts();
+            displayPagination();
+        }
 
-    if (docSnap.exists()) {
-        const product = docSnap.data();
-        const productDetails = document.getElementById("product-details");
-        productDetails.innerHTML = `
-            <div class="product-image">
-                <img src="${product.image}" alt="${product.name}">
-            </div>
-            <div class="product-info">
-                <h2>${product.name}</h2>
-                <p>${product.description}</p>
-            </div>
-        `;
-    } else {
-        document.getElementById("product-details").innerHTML = "<p>Product not found.</p>";
-    }
-}
+        function displayProducts() {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
 
-        loadProductDetails();
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const currentProducts = products.slice(startIndex, endIndex);
+
+            currentProducts.forEach(product => {
+                const productItem = document.createElement("div");
+                productItem.classList.add("product-item");
+                productItem.innerHTML = `
+                    <a href="product.html?id=${product.id}">
+                        <img src="${product.image || 'placeholder.jpg'}" alt="${product.name}">
+                        <h3>${product.name || 'No Name Available'}</h3>
+                        <p>${product.description || 'No Description Available'}</p>
+                    </a>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        function displayPagination() {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+            const totalPages = Math.ceil(products.length / productsPerPage);
+
+            if (currentPage > 1) {
+                const prevButton = document.createElement("button");
+                prevButton.innerText = "Previous";
+                prevButton.onclick = () => {
+                    currentPage--;
+                    displayProducts();
+                    displayPagination();
+                };
+                pagination.appendChild(prevButton);
+            }
+
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement("button");
+                nextButton.innerText = "Next";
+                nextButton.onclick = () => {
+                    currentPage++;
+                    displayProducts();
+                    displayPagination();
+                };
+                pagination.appendChild(nextButton);
+            }
+        }
+
+        loadWoodProducts();
     </script>
 </body>
 </html>
