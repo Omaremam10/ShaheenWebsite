@@ -225,9 +225,11 @@
                 const productItem = document.createElement("div");
                 productItem.classList.add("product-item");
                 productItem.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
+                    <a href="product.html?id=${product.id}">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                    </a>
                 `;
                 productList.appendChild(productItem);
             });
