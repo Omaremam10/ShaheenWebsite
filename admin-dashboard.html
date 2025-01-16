@@ -1,4 +1,3 @@
-admin-dashboard.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +95,6 @@ admin-dashboard.html
     <div class="container">
         <h1>Admin Dashboard - Manage Products</h1>
 
-        <!-- Product Add/Edit Form -->
         <form id="product-form">
             <input type="text" id="product-name" placeholder="Product Name" required>
             <textarea id="product-description" placeholder="Product Description" required></textarea>
@@ -109,81 +107,94 @@ admin-dashboard.html
             <button type="submit" class="btn">Add Product</button>
         </form>
 
-        <!-- Product List -->
         <div class="product-list" id="product-list">
             <!-- Dynamic product items will be displayed here -->
         </div>
     </div>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
   import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
+  // Firebase configuration
   const firebaseConfig = {
-    apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
-    authDomain: "shaheenfalcon-b2ea2.firebaseapp.com",
-    projectId: "shaheenfalcon-b2ea2",
-    storageBucket: "shaheenfalcon-b2ea2.appspot.com",
-    messagingSenderId: "823963121655",
-    appId: "1:823963121655:web:cc6d1745a7ac0b517320f2",
-    measurementId: "G-KGEGEPVWHB"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
   };
 
+  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
   const db = getFirestore(app);
-  const productCollection = collection(db, 'products');
 
-  async function loadProducts() {
-      const querySnapshot = await getDocs(productCollection);
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-      querySnapshot.forEach((doc) => {
-          const product = doc.data();
-          const productElement = document.createElement('div');
-          productElement.classList.add('product-item');
-          productElement.innerHTML = `
-              <img src="${product.image}" alt="${product.name}">
-              <h3>${product.name}</h3>
-              <p>${product.description}</p>
-              <p>Category: ${product.category}</p>
-              <div class="actions">
-                  <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
-                  <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
-              </div>
-          `;
-          productList.appendChild(productElement);
-      });
-  }
-
-  document.getElementById('product-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('product-name').value;
-      const description = document.getElementById('product-description').value;
-      const category = document.getElementById('product-category').value;
-      const imageUrl = document.getElementById('product-image').value;
-
-      if (name && description && category && imageUrl) {
-          await addDoc(productCollection, {
-              name: name,
-              description: description,
-              category: category,
-              image: imageUrl
-          });
-          alert('Product added successfully');
-          loadProducts();
-      } else {
-          alert('Please fill in all fields');
-      }
+  // Redirect if not logged in
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      alert("You must be logged in!");
+      window.location.href = "index.html";
+    }
   });
 
-  async function deleteProduct(productId) {
-      await deleteDoc(doc(productCollection, productId));
-      alert('Product deleted successfully');
-      loadProducts();
+  // Reference to product collection
+  const productCollection = collection(db, "products");
+
+  // Load products from Firestore
+  async function loadProducts() {
+    const querySnapshot = await getDocs(productCollection);
+    const productList = document.getElementById("product-list");
+    productList.innerHTML = "";
+    querySnapshot.forEach(doc => {
+      const product = doc.data();
+      const productItem = document.createElement("div");
+      productItem.classList.add("product-item");
+      productItem.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <h3>${product.name}</h3>
+        <p>${product.description}</p>
+        <p>Category: ${product.category}</p>
+        <div class="actions">
+          <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
+          <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
+        </div>
+      `;
+      productList.appendChild(productItem);
+    });
   }
 
+  // Add product to Firestore
+  document.getElementById("product-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("product-name").value;
+    const description = document.getElementById("product-description").value;
+    const category = document.getElementById("product-category").value;
+    const image = document.getElementById("product-image").value;
+
+    try {
+      await addDoc(productCollection, { name, description, category, image });
+      alert("Product added successfully!");
+      loadProducts();
+    } catch (err) {
+      alert("Error adding product: " + err.message);
+    }
+  });
+
+  // Delete product from Firestore
+  async function deleteProduct(id) {
+    try {
+      await deleteDoc(doc(productCollection, id));
+      alert("Product deleted successfully!");
+      loadProducts();
+    } catch (err) {
+      alert("Error deleting product: " + err.message);
+    }
+  }
+
+  // Load products on page load
   loadProducts();
 </script>
-
 </body>
 </html>
