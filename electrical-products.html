@@ -1,11 +1,9 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electrical Products</title>
     <style>
-        /* Reuse styles from the main page */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,49 +11,122 @@
             background-color: #f8f9fa;
         }
 
-        .top-bar, .search-bar, .nav-bar {
-            /* Same styles as index.html */
+        header {
+            background-color: #343a40;
+            padding: 10px 20px;
+            color: #fff;
         }
 
-        .product-page {
+        header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        h1 {
             text-align: center;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-top: 40px;
         }
 
-        .product-page h2 {
-            margin-bottom: 20px;
+        .product-item {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
-        .product-page .product-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .product-page .product-grid img {
-            width: 200px;
+        .product-item img {
+            width: 100%;
             height: 200px;
             object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .product-item h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .product-item p {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-
-<!-- Include top bar, navigation bar, and search bar -->
-<!-- Same as in index.html -->
-
-<!-- Electrical Products -->
-<div class="product-page">
-    <h2>Our Electrical Products</h2>
-    <div class="product-grid">
-        <img src="images/electrical-product1.jpg" alt="Electrical Product 1">
-        <img src="images/electrical-product2.jpg" alt="Electrical Product 2">
-        <img src="images/electrical-product3.jpg" alt="Electrical Product 3">
+    <header>
+        <nav>
+            <div>My Store</div>
+            <div>
+                <a href="index.html">Home</a>
+                <a href="wooden-products.html">Wooden Products</a>
+                <a href="electrical-products.html">Electrical Products</a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Electrical Products</h1>
+        <div class="product-list" id="product-list">
+            <!-- Dynamic product items will be displayed here -->
+        </div>
     </div>
-</div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadElectricalProducts() {
+            const q = query(collection(db, "products"), where("category", "==", "electrical"));
+            const querySnapshot = await getDocs(q);
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+
+            querySnapshot.forEach(doc => {
+                const product = doc.data();
+                const productItem = document.createElement("div");
+                productItem.classList.add("product-item");
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        loadElectricalProducts();
+    </script>
 </body>
 </html>
