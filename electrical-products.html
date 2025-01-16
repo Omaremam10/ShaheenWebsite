@@ -203,7 +203,7 @@
         const productsPerPage = 20;
 
         async function loadElectricalProducts() {
-            const q = query(collection(db, "products"), where("category", "==", "wood"));
+            const q = query(collection(db, "products"), where("category", "==", "electrical"));
             const querySnapshot = await getDocs(q);
             products = [];
             querySnapshot.forEach(doc => {
