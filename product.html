@@ -1,96 +1,129 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - Product Name</title>
+    <title>Product Details</title>
     <style>
-        /* Add some general styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f8f9fa;
         }
-        
-        .container {
-            width: 80%;
-            margin: 20px auto;
+
+        .top-bar {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
         }
 
-        h1 {
-            text-align: center;
+        .top-bar a {
+            color: #f5c518;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            background-color: #f5c518;
+            padding: 15px 0;
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+
+        .nav-bar a:hover {
+            color: #333;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
         }
 
         .product-detail {
             display: flex;
-            gap: 30px;
+            justify-content: space-between;
         }
 
-        .product-detail img {
-            max-width: 100%;
-            max-height: 400px;
+        .product-image {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .product-image img {
+            width: 100%;
+            max-height: 500px;
             object-fit: contain;
-            border-radius: 10px;
         }
 
-        .product-detail .description {
+        .product-info {
             flex: 1;
             padding: 20px;
             background-color: #fff;
-            border-radius: 10px;
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .description h2 {
-            font-size: 1.5em;
-            color: #333;
+        .product-info h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
         }
 
-        .description p {
-            font-size: 1em;
+        .product-info p {
+            font-size: 1.2em;
             line-height: 1.5;
-            color: #666;
         }
 
-        /* Navigation bar (same as other pages) */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
+        .back-button {
+            background-color: #f5c518;
+            border: none;
             padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.1em;
+            border-radius: 5px;
         }
 
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px;
-        }
-
-        .navbar a:hover {
-            background-color: #575757;
+        .back-button:hover {
+            background-color: #e4b015;
         }
     </style>
 </head>
 <body>
+    <div class="top-bar">
+        <div>
+            📞 +201005071246 | 📍 <a href="contact.html">Location</a> | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
+        </div>
+        <div>
+            <strong>Shaheen Falcon LTD</strong>
+        </div>
+    </div>
 
-    <!-- Navigation bar (same as other pages) -->
-    <div class="navbar">
-        <a href="/">Home</a>
-        <a href="/electrical-products.html">Electrical Products</a>
-        <a href="/wood-products.html">Wood Products</a>
-        <a href="/logout.html">Logout</a>
+    <div class="nav-bar">
+        <a href="index.html">Home</a>
+        <a href="electrical-products.html">Electrical Products</a>
+        <a href="wood-products.html">Wood Products</a>
+        <a href="discounts.html">Discounts</a>
+        <a href="contact.html">Contact Us</a>
     </div>
 
     <div class="container">
-        <h1 id="product-name">Loading...</h1>
-
         <div class="product-detail">
-            <img id="product-image" src="" alt="Product Image">
-            <div class="description">
-                <h2 id="product-category">Category: </h2>
+            <div class="product-image">
+                <img id="product-img" src="" alt="">
+            </div>
+            <div class="product-info">
+                <h1 id="product-name"></h1>
                 <p id="product-description"></p>
+                <button class="back-button" onclick="window.history.back()">Back</button>
             </div>
         </div>
     </div>
@@ -109,32 +142,25 @@
             measurementId: "G-KGEGEPVWHB"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Get the product ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
 
-        // Reference to product document
-        const productDocRef = doc(db, "products", productId);
+        async function loadProductDetails() {
+            const productRef = doc(db, "products", productId);
+            const docSnap = await getDoc(productRef);
 
-        // Fetch product data from Firestore
-        async function loadProduct() {
-            const docSnap = await getDoc(productDocRef);
             if (docSnap.exists()) {
                 const product = docSnap.data();
+                document.getElementById("product-img").src = product.image;
                 document.getElementById("product-name").innerText = product.name;
-                document.getElementById("product-image").src = product.image;
-                document.getElementById("product-category").innerText = `Category: ${product.category}`;
                 document.getElementById("product-description").innerText = product.description;
-            } else {
-                console.log("No such product!");
             }
         }
 
-        loadProduct();
+        loadProductDetails();
     </script>
 </body>
 </html>
