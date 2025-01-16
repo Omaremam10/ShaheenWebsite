@@ -183,16 +183,20 @@
     }
   });
 
-  // Delete product from Firestore
-  async function deleteProduct(id) {
-    try {
-      await deleteDoc(doc(productCollection, id));
-      alert("Product deleted successfully!");
-      loadProducts();
-    } catch (err) {
-      alert("Error deleting product: " + err.message);
-    }
+ // Delete product from Firestore
+async function deleteProduct(id) {
+  try {
+    await deleteDoc(doc(productCollection, id));
+    alert("Product deleted successfully!");
+    loadProducts();
+  } catch (err) {
+    alert("Error deleting product: " + err.message);
   }
+}
+
+// Attach deleteProduct to the window object
+window.deleteProduct = deleteProduct;
+
 
   // Load products on page load
   loadProducts();
