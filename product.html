@@ -143,29 +143,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        async function loadProductDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get("id");
-            const docRef = doc(db, "products", productId);
-            const docSnap = await getDoc(docRef);
+       async function loadProductDetails() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get("id");
+    
+    // Check if productId is available
+    if (!productId) {
+        document.getElementById("product-details").innerHTML = "<p>Product not found.</p>";
+        return;
+    }
 
-            if (docSnap.exists()) {
-                const product = docSnap.data();
-                const productDetails = document.getElementById("product-details");
-                productDetails.innerHTML = `
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}">
-                    </div>
-                    <div class="product-info">
-                        <h2>${product.name}</h2>
-                        <p>${product.description}</p>
-                        <p class="price">$${product.price}</p>
-                    </div>
-                `;
-            } else {
-                alert("Product not found!");
-            }
-        }
+    const docRef = doc(db, "products", productId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const product = docSnap.data();
+        const productDetails = document.getElementById("product-details");
+        productDetails.innerHTML = `
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.name}">
+            </div>
+            <div class="product-info">
+                <h2>${product.name}</h2>
+                <p>${product.description}</p>
+                <p class="price">$${product.price}</p>
+            </div>
+        `;
+    } else {
+        document.getElementById("product-details").innerHTML = "<p>Product not found.</p>";
+    }
+}
 
         loadProductDetails();
     </script>
