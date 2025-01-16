@@ -143,29 +143,32 @@
   // Reference to product collection
   const productCollection = collection(db, "products");
 
-  // Load products from Firestore
-  async function loadProducts() {
-    const querySnapshot = await getDocs(productCollection);
-    const productList = document.getElementById("product-list");
-    productList.innerHTML = "";
-    querySnapshot.forEach(doc => {
-      const product = doc.data();
-      const productItem = document.createElement("div");
-      productItem.classList.add("product-item");
-      productItem.innerHTML = `
-        <img src="${product.image}" alt="${product.name}">
-        <h3>${product.name}</h3>
-        <p>${product.description}</p>
-        <p>Category: ${product.category}</p>
-        <div class="actions">
-          <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
-          <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
-        </div>
-      `;
-      productList.appendChild(productItem);
-    });
-  }
+ // Load products from Firestore
+async function loadProducts() {
+  const querySnapshot = await getDocs(productCollection);
+  const productList = document.getElementById("product-list");
+  productList.innerHTML = ""; // Clear the current product list
 
+  querySnapshot.forEach(doc => {
+    const product = doc.data();
+    console.log(product.image); // Debug the image URL to ensure it's correct
+
+    const productItem = document.createElement("div");
+    productItem.classList.add("product-item");
+    productItem.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" onerror="this.src='fallback-image-url.jpg'">
+      <h3>${product.name}</h3>
+      <p>${product.description}</p>
+      <p>Category: ${product.category}</p>
+      <div class="actions">
+        <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
+        <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
+      </div>
+    `;
+
+    productList.appendChild(productItem); // Add the product item to the list
+  });
+}
   // Add product to Firestore
   document.getElementById("product-form").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -198,33 +201,8 @@ async function deleteProduct(id) {
 window.deleteProduct = deleteProduct;
 
 
- // Load products from Firestore
-async function loadProducts() {
-  const querySnapshot = await getDocs(productCollection);
-  const productList = document.getElementById("product-list");
-  productList.innerHTML = ""; // Clear the current product list
-
-  querySnapshot.forEach(doc => {
-    const product = doc.data();
-    console.log(product.image); // Debug the image URL to ensure it's correct
-
-    const productItem = document.createElement("div");
-    productItem.classList.add("product-item");
-    productItem.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" onerror="this.src='fallback-image-url.jpg'">
-      <h3>${product.name}</h3>
-      <p>${product.description}</p>
-      <p>Category: ${product.category}</p>
-      <div class="actions">
-        <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
-        <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
-      </div>
-    `;
-
-    productList.appendChild(productItem); // Add the product item to the list
-  });
-}
-
+// Load products on page load
+  loadProducts();
 </script>
 
 </body>
