@@ -3,8 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wooden Products</title>
-     <style>
-          /* General styles */
+    <style>
+        /* General styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -68,7 +68,6 @@
             color: #333;
         }
 
-
         header {
             background-color: #343a40;
             padding: 10px 20px;
@@ -105,6 +104,7 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 40px;
+            transition: transform 0.3s ease-in-out;
         }
 
         .product-item {
@@ -113,6 +113,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .product-item img {
@@ -120,6 +121,16 @@
             height: 200px;
             object-fit: cover;
             border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-item img:hover {
+            transform: scale(1.05);
         }
 
         .product-item h3 {
@@ -129,11 +140,33 @@
 
         .product-item p {
             margin: 5px 0;
+            color: #555;
+        }
+
+        /* Pagination */
+        .pagination {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            text-decoration: none;
+            background-color: #f5c518;
+            color: #333;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
         }
     </style>
 </head>
 <body>
-   <!-- Top bar with admin link -->
+
+<!-- Top bar with admin link -->
 <div class="top-bar">
     <div>
         📞 +201005071246 | 📍 <a href="contact.html">Location</a> | ✉️ <a href="mailto:info@shaheenfalcon.com">info@shaheenfalcon.com</a>
@@ -148,7 +181,7 @@
 
 <!-- Search bar -->
 <div class="search-bar">
-    <input type="text" placeholder="Search products...">
+    <input type="text" placeholder="Search products..." id="searchInput">
 </div>
 
 <!-- Navigation bar -->
@@ -159,49 +192,95 @@
     <a href="discounts.html">Discounts</a>
     <a href="contact.html">Contact Us</a>
 </div>
-    <div class="container">
-        <h1>Wooden Products</h1>
-        <div class="product-list" id="product-list">
-            <!-- Dynamic product items will be displayed here -->
-        </div>
+
+<div class="container">
+    <h1>Wooden Products</h1>
+    <div class="product-list" id="product-list">
+        <!-- Dynamic product items will be displayed here -->
     </div>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-             apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
-    authDomain: "shaheenfalcon-b2ea2.firebaseapp.com",
-    projectId: "shaheenfalcon-b2ea2",
-    storageBucket: "shaheenfalcon-b2ea2.firebasestorage.app",
-    messagingSenderId: "823963121655",
-    appId: "1:823963121655:web:cc6d1745a7ac0b517320f2",
-    measurementId: "G-KGEGEPVWHB"
-        };
+    <!-- Pagination -->
+    <div class="pagination" id="pagination">
+        <!-- Pagination links will be displayed here -->
+    </div>
+</div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-        async function loadWoodenProducts() {
-            const q = query(collection(db, "products"), where("category", "==", "wood"));
-            const querySnapshot = await getDocs(q);
-            const productList = document.getElementById("product-list");
-            productList.innerHTML = "";
+    const firebaseConfig = {
+        apiKey: "AIzaSyA5LCQf4Ike69o5lRoVVuhYllV0-FT1YAc",
+        authDomain: "shaheenfalcon-b2ea2.firebaseapp.com",
+        projectId: "shaheenfalcon-b2ea2",
+        storageBucket: "shaheenfalcon-b2ea2.firebasestorage.app",
+        messagingSenderId: "823963121655",
+        appId: "1:823963121655:web:cc6d1745a7ac0b517320f2",
+        measurementId: "G-KGEGEPVWHB"
+    };
 
-            querySnapshot.forEach(doc => {
-                const product = doc.data();
-                const productItem = document.createElement("div");
-                productItem.classList.add("product-item");
-                productItem.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                `;
-                productList.appendChild(productItem);
-            });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let products = [];
+    let currentPage = 1;
+    const productsPerPage = 20;
+
+    async function loadWoodenProducts() {
+        const q = query(collection(db, "products"), where("category", "==", "wood"));
+        const querySnapshot = await getDocs(q);
+        products = [];
+
+        querySnapshot.forEach(doc => {
+            const product = doc.data();
+            products.push(product);
+        });
+
+        displayProducts();
+    }
+
+    function displayProducts() {
+        const productList = document.getElementById("product-list");
+        productList.innerHTML = "";
+
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = startIndex + productsPerPage;
+        const currentPageProducts = products.slice(startIndex, endIndex);
+
+        currentPageProducts.forEach(product => {
+            const productItem = document.createElement("div");
+            productItem.classList.add("product-item");
+            productItem.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+            `;
+            productList.appendChild(productItem);
+        });
+
+        displayPagination();
+    }
+
+    function displayPagination() {
+        const pagination = document.getElementById("pagination");
+        const totalPages = Math.ceil(products.length / productsPerPage);
+
+        pagination.innerHTML = "";
+        for (let i = 1; i <= totalPages; i++) {
+            const pageLink = document.createElement("a");
+            pageLink.href = "#";
+            pageLink.textContent = i;
+            pageLink.onclick = () => changePage(i);
+            pagination.appendChild(pageLink);
         }
+    }
 
-        loadWoodenProducts();
-    </script>
+    function changePage(page) {
+        currentPage = page;
+        displayProducts();
+    }
+
+    loadWoodenProducts();
+</script>
 </body>
 </html>
