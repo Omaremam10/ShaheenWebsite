@@ -143,7 +143,7 @@
   // Reference to product collection
   const productCollection = collection(db, "products");
 
- // Load products from Firestore
+// Load products from Firestore
 async function loadProducts() {
   const querySnapshot = await getDocs(productCollection);
   const productList = document.getElementById("product-list");
@@ -151,7 +151,7 @@ async function loadProducts() {
 
   querySnapshot.forEach(doc => {
     const product = doc.data();
-    console.log(product.image); // Debug the image URL to ensure it's correct
+    const productId = doc.id; // Firestore's document ID
 
     const productItem = document.createElement("div");
     productItem.classList.add("product-item");
@@ -160,13 +160,14 @@ async function loadProducts() {
       <h3>${product.name}</h3>
       <p>${product.description}</p>
       <p>Category: ${product.category}</p>
+      <a class="btn" href="product.html?id=${productId}">View Details</a>
       <div class="actions">
-        <button class="btn" onclick="editProduct('${doc.id}')">Edit</button>
-        <button class="btn-delete" onclick="deleteProduct('${doc.id}')">Delete</button>
+        <button class="btn" onclick="editProduct('${productId}')">Edit</button>
+        <button class="btn-delete" onclick="deleteProduct('${productId}')">Delete</button>
       </div>
     `;
 
-    productList.appendChild(productItem); // Add the product item to the list
+    productList.appendChild(productItem);
   });
 }
 
